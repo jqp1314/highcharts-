@@ -1,0 +1,416 @@
+<!DOCTYPE HTML>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet"  type="text/css" href="./11/main.css"/>
+<script type="text/javascript" src="./11/public/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+<script type="text/javascript" src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+<script type="text/javascript" src="./11/public/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="./11/canvg.js"></script>
+<script type="text/javascript" src="./11/html2canvas.min.js"></script>
+
+<script type="text/javascript" src="./11/public/publicFun.js"></script>
+<script type="text/javascript" src="./11/addprogramName.js"></script>
+<script type="text/javascript" src="./11/loadChart.js"></script>
+<script type="text/javascript" src="./11/exportAll.js"></script>
+<script type="text/javascript" src="./11/public/customTime_video.js"></script>
+<script type="text/javascript" src="./11/public/customTime_news.js"></script>
+<script type="text/javascript" src="./11/public/customTime_radical.js"></script>
+<body>
+
+
+<div class="w clear" id="main">
+    <div class="con" style="width:1200px;margin: 0 auto;">
+        <!--标题开始-->
+        <div class="classMenu mar20" style="width: 100%;height: 45px;line-height: 45px;background: #d9edda">
+            <ul class="clear">
+                <li id="programTrendAnalysis"  class="selected"  style="background: #009b0e;width: 200px;font-size: 20px;
+    font-weight: bold;text-align: center">
+                    <a onclick=""
+                       href="javascript:;" style="color:#FFF;">节目趋势分析</a>
+                </li>
+                <span style="position: relative;">
+                        <b class="selected_item" id="mouseLinkMove" onclick="mouseLinkMove(this)" title="鼠标联动分析">联</b>
+                        <b class="export_b" id="exportAll" title="导出全部数据"><img class="excel" src="./11/image/exportgreen2.png"/></b>
+						 <div style="display:none;background: #fff;">
+						 	<canvas id="canvasAll">00</canvas>
+							<div id="canvasOut" style="background: #fff;">
+								<canvas id="canvas1">00</canvas>
+								<canvas id="canvas2">22</canvas>
+								<canvas id="canvas3">33</canvas>
+							</div>
+						 </div>
+                     </span>
+            </ul>
+        </div>
+        <div class="location mar20"><span class="address_tubiao"></span>您当前的位置：网络综合分析 > 趋势综合分析 > <strong>节目趋势分析</strong></div>
+        <!--条件列表开始-->
+        <div class="tiaojian mar20">
+            <div class="clear list_selection">
+                <div class="list program clear">
+                    <span>节目名称：</span>
+                    <div class="fright" id="programInput">
+                        <i class="program_name">
+                            <input type="text" name="长盛天歌" value="长盛天歌" placeholder="输入分析的节目名称" onkeyup="searchProgram(this,event)" id="256">
+                            <img onclick="programNS.removeInput(this)" src="./image/remove.png" />
+                            <ul class="programUl" id="programUl"></ul>
+                        </i>
+                        <i class="program_name">
+                            <input type="text" name="如懿传" value="如懿传" placeholder="输入分析的节目名称" onkeyup="searchProgram(this,event)" id="256">
+                            <img onclick="programNS.removeInput(this)" src="./image/remove.png" />
+                            <ul class="programUl" id="programUl"></ul>
+                        </i>
+
+                        <span class="addnamespan" id="addName"><big class="addname"  title="添加"  onclick="addInput(this)"> + </big></span>
+                    </div>
+                </div>
+
+                <div class="list video clear">
+                    <span>视频平台：</span>
+                    <div class="fright" id="video" >
+                            <span data="11"  title="爱奇艺" class="selectPlat selected">爱奇艺</span>
+                            <span data="11"  title="搜狐视频" class="selectPlat selected">搜狐视频</span>
+                            <span data="11"  title="爱奇艺" class="selectPlat">爱奇艺</span>
+                    </div>
+                </div>
+
+                <div class="list newsPlats clear">
+                    <span>新闻平台：</span>
+                    <div class="fright" id="newsPlats">
+                        <span data="11"  title="百度新闻" class="selectPlat selected">百度新闻</span>
+                        <span data="11"  title="搜狗新闻" class="selectPlat selected">搜狗新闻</span>
+                        <span data="11"  title="360新闻" class="selectPlat selected">360新闻</span>
+                        <span data="11"  title="360新闻" class="selectPlat">360新闻</span>
+                        <span data="11"  title="360新闻" class="selectPlat">360新闻</span>
+                        <span data="11"  title="360新闻" class="selectPlat">360新闻</span>
+                        <!--<c:forEach var="i" items="${newsPlatformList}">
+                            <span data="${i.platformId}"  title="${i.platformName}" class="selectPlat">${i.platformName}</span>
+                        </c:forEach>-->
+                    </div>
+                </div>
+
+                <div class="list radical clear">
+                    <span>指数平台：</span>
+                    <div class="fright" id="radical">
+                        <span data="11"  title="新浪微博指数" class="selectPlat selected">新浪微博指数</span>
+                        <span data="11"  title="百度指数" class="selectPlat selected">百度指数</span>
+                        <span data="11"  title="微信指数" class="selectPlat selected">微信指数</span>
+                        <span data="11"  title="微信指数" class="selectPlat">微信指数</span>
+                        <span data="11"  title="微信指数" class="selectPlat">微信指数</span>
+                        <span data="11"  title="微信指数" class="selectPlat">微信指数</span>
+                        <!--<c:forEach var="i" items="${indexPlatformList}">
+                            <span data="${i.platformId}"  title="${i.platformName}" class="selectPlat">${i.platformName}</span>
+                        </c:forEach>-->
+                    </div>
+                </div>
+
+                <div class="list searchDel">
+                    <div>
+                        <button type="button" onclick="doEmpty()">清空</button>
+                        <button type="button" id="doSearchBtn" video="done" news="done" radical="done" onclick="doSearch()">查询</button>
+                        <button type="button"  id="setingSee" >
+                            <img class="moreSee gray" src="./11/image/arrowup.png"/></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!--视频播放量分析  ------------------------------------------------------------------------  -->
+        <div class="tongji_result">
+            <div class="greenLine">
+                <h2>
+                    <span class="margin_r20"><span class="titleIcon"></span>视频播放量分析</span><i class="radian"></i>
+                </h2>
+                <div class="fright">
+                    <span class="span_select" id="setJunVideo" onclick="setJunVideo()" title="平均值分析">均</span>
+                    <span class="exptImg" title="导出"><img class="gray excel" src="./11/image/exportgreen.png"/></span>
+                    <span class="arrows"><img class="gray" onclick="container(this)" src="./11/image/arrowup.png"/></span>
+                </div>
+            </div>
+
+            <div class="container" style="position: relative">
+                <div class="containertit">
+                    <div class="containertit_fl fl" id="selected_video">
+                        <!-- <li> <span style="background: #7cb5ec;"></span>爱奇艺 </li>-->
+                    </div>
+                    <div class="containertit_fr" id="selectedTime_video">
+                        <span class="selected">7天</span>
+                        <span>30天</span>
+                        <span>90天</span>
+                        <span>半年</span>
+                        <span>全部</span>
+                        <div class="baseline" id="baseline_video" >
+                            <button baseVal = 'day' type="button" onclick="baseLineShow(this)">日线</button>
+                            <div class="baseline_dropdown">
+                                <ul baseVal = 'day' onclick="searchClickBaselineVideo(this)">日线</ul>
+                                <ul baseVal = 'week' onclick="searchClickBaselineVideo(this)">周线</ul>
+                                <ul baseVal = 'month' onclick="searchClickBaselineVideo(this)">月线</ul>
+                                <ul baseVal = 'quarter' onclick="searchClickBaselineVideo(this)">季线</ul>
+                                <ul baseVal = 'year' onclick="searchClickBaselineVideo(this)">年线</ul>
+                            </div>
+                        </div>
+                        <div class="customTime" id="customTime_video" >自定义</div>
+                        <!--01 自定义时间 video-->
+                        <div id="date_video" class="data">
+                            <a class="clear">
+                                <span class="startTimeAndEndTime">日期：${startTime}~${endTime}</span><span class="data_angle"></span>
+                            </a>
+                            <div class="pop dataPop">
+                                <div class="info">
+                                    <div class="rq clear">
+                                        <!--<input id="startTime" readonly="readonly" maxlength="10" onkeyup="upDo(this);" class="Wdate" type="text" value=${startTime}  />-->
+                                        <input id="startTime_video" readonly="readonly" maxlength="10" onkeyup="upDo(this);" class="Wdate" type="text" value="2018-10-01"  />
+                                        &nbsp;至&nbsp;
+                                        <input id="endTime_video" readonly="readonly" maxlength="10" onkeyup="upDo(this);"  class="Wdate" type="text" value="2018-10-10" />
+                                        <div class="clear">
+                                            <!-- 开始日期控件 -->
+                                            <div id="startDiv_video" style="border:1px solid white;float:left;"></div>
+                                            <!-- 结束日期控件 -->
+                                            <div id="endDiv_video" style="border:1px solid white;float: right;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="ok_time"><span id="ok_video" onclick="startAndEndTimeNSVideo.okTime()">确定</span><span id="cancel_video">取消</span></div>
+                                <div class="popTL"></div>
+                                <div class="popTR"></div>
+                                <div class="popBL"></div>
+                                <div class="popBR"></div>
+                                <div class="popT"></div>
+                                <div class="popL"></div>
+                                <div class="popB"></div>
+                                <div class="popR"></div>
+                                <div class="angle"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="containercon" id="containerVideo" style="width: 1180px;">
+                    <div class="no_data">
+                        <div><img src="./11/image/none_data.png" /></div>
+                        <p>在当前搜索条件下无数据</p>
+                        <p>建议您放宽搜索条件进行查询！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--新闻统计分析  ------------------------------------------------------------------------  -->
+        <div class="tongji_result">
+            <div class="greenLine">
+                <h2>
+                    <span class="margin_r20"><span class="titleIcon" style="background-position: -114px -127px;"></span>新闻统计分析</span><i class="radian"></i>
+                </h2>
+                <div class="fright">
+                    <span class="span_select selected" id="quchong_news" title="开启新闻标题相同分析">重</span>
+                    <!--<%&#45;&#45;<span class="span_select" id="biao_news" title="显示新闻明细列表">表</span> 暂时去掉&#45;&#45;%>-->
+                    <span class="span_select" id="setJunNews" onclick="setJunNews()" title="平均值分析">均</span>
+                    <span class="exptImg" title="导出"><img class="gray excel" src="./11/image/exportgreen.png"/></span>
+                    <div class="exportImgs">
+                        <h2></h2>
+                        <h1>打印图表</h1>
+                        <ul>
+                            <li id="exportNewsPNG">下载PNG图片</li>
+                            <li id="exportNewsJPEG">下载JPEG图片</li>
+                        </ul>
+                    </div>
+                    <span class="arrows"><img class="gray" onclick="container(this)" src="./11/image/arrowup.png"/></span>
+                </div>
+            </div>
+            <div class="container" style="position: relative;height:auto; background:#fff;">
+                <div class="containertit">
+                    <div class="containertit_fl fl" id="selected_news">
+                        <!-- <li> <span style="background: #7cb5ec;"></span>百度 </li>-->
+                    </div>
+                    <div class="containertit_fr" id="selectedTime_news">
+                        <span class="selected">7天</span>
+                        <span>30天</span>
+                        <span>90天</span>
+                        <span>半年</span>
+                        <span>全部</span>
+                        <div class="baseline" id="baseline_news" >
+                            <button baseVal = 'day' type="button" onclick="baseLineShow(this)">日线</button>
+                            <div class="baseline_dropdown">
+                                <ul baseVal = 'day' onclick="searchClickBaselineNews(this)">日线</ul>
+                                <ul baseVal = 'week' onclick="searchClickBaselineNews(this)">周线</ul>
+                                <ul baseVal = 'month' onclick="searchClickBaselineNews(this)">月线</ul>
+                                <ul baseVal = 'quarter' onclick="searchClickBaselineNews(this)">季线</ul>
+                                <ul baseVal = 'year' onclick="searchClickBaselineNews(this)">年线</ul>
+                            </div>
+                        </div>
+                        <div class="customTime" id="customTime_news" >自定义</div>
+                        <!--<%&#45;&#45;01 自定义时间 news&#45;&#45;%>-->
+                        <div id="date_news" class="data">
+                            <a class="clear">
+                                <span class="startTimeAndEndTime">日期：${startTime}~${endTime}</span><span class="data_angle"></span>
+                            </a>
+                            <div class="pop dataPop">
+                                <div class="info">
+                                    <div class="rq clear">
+                                        <!--<input id="startTime" readonly="readonly" maxlength="10" onkeyup="upDo(this);" class="Wdate" type="text" value=${startTime}  />-->
+                                        <input id="startTime_news" readonly="readonly" maxlength="10" onkeyup="upDo(this);" class="Wdate" type="text" value="2018-10-01"  />
+                                        &nbsp;至&nbsp;
+                                        <input id="endTime_news" readonly="readonly" maxlength="10" onkeyup="upDo(this);"  class="Wdate" type="text" value="2018-10-10" />
+                                        <div class="clear">
+                                            <!-- 开始日期控件 -->
+                                            <div id="startDiv_news" style="border:1px solid white;float:left;"></div>
+                                            <!-- 结束日期控件 -->
+                                            <div id="endDiv_news" style="border:1px solid white;float: right;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="ok_time"><span id="ok_news" onclick="startAndEndTimeNSNews.okTime()">确定</span><span id="cancel_news">取消</span></div>
+                                <div class="popTL"></div>
+                                <div class="popTR"></div>
+                                <div class="popBL"></div>
+                                <div class="popBR"></div>
+                                <div class="popT"></div>
+                                <div class="popL"></div>
+                                <div class="popB"></div>
+                                <div class="popR"></div>
+                                <div class="angle"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="containercon" id="containerNews" style="width:1180px;">
+                    <div class="no_data">
+                        <div><img src="./11/image/none_data.png" /> </div>
+                        <p>在当前搜索条件下无数据</p>
+                        <p>建议您放宽搜索条件进行查询！</p>
+                    </div>
+                </div>
+                <!--<div class="containercon" id="biao_table_news"  style="width: 98%;display: none; ">
+                <div class="wrapper">
+                    <ul class="tab_title" id="tab_table">
+                        <li class="tab-item active">天盛长歌 </li>
+                        <li class="tab-item">如懿传 </li>
+                        <li class="tab-item">月嫂先生 </li>
+                    </ul>
+                    <div class="tab_con" id="tab_table_con">
+                        <table border="1" class="table_one">
+                            <thead>
+                            <th>序号01</th>
+                            <th>新闻标题</th>
+                            <th>发布时间</th>
+                            <th>新闻源数</th>
+                            <th>重复条数</th>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                        <div class="table_fenye">
+                            <ul>
+                                <div class="fl">
+                                    <span id="refresh" onclick="refreshloadThisTable(this)"><img class="gray" src="./11/image/refresh.png" /> </span>
+                                    &lt;%&ndash;<span><img class="gray" src="./11/image/left_k.png" /> </span>&ndash;%&gt;
+                                    <span id="prevPage" onclick="prevPage(this)"><img class="gray" src="./11/image/left.png" /> </span>
+                                    <span style="margin-right: 7px;"> <input type="text" value="1"/> 页 </span>
+                                    <span id="nextPage" onclick="nextPage(this)"><img class="gray" style="transform:rotate(180deg);" src="./11/image/left.png" /></span>
+                                    &lt;%&ndash;<span><img class="gray" style="transform:rotate(180deg);" src="./11/image/left_k.png" /></span>&ndash;%&gt;
+                                </div>
+                                <div class="fr" id="total">
+                                    共293页，共 1382条数据
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            </div>
+        </div>
+
+        <!--平台指数分析  ------------------------------------------------------------------------  -->
+        <div class="tongji_result">
+            <div class="greenLine">
+                <h2>
+                    <span class="margin_r20"><span class="titleIcon"></span>平台指数分析</span><i class="radian"></i>
+                </h2>
+                <div class="fright">
+                    <span class="span_select" id="setJunRadical" onclick="setJunRadical()" title="平均值分析">均</span>
+                    <span class="exptImg" title="导出" ><img class="gray excel" src="./11/image/exportgreen.png"/></span>
+                    <span class="arrows"><img class="gray" onclick="container(this)" src="./11/image/arrowup.png"/></span>
+                </div>
+            </div>
+
+            <div class="container" style="position: relative">
+                <div class="containertit">
+                    <div class="containertit_fl fl" id="selected_radical">
+                        <!-- <li> <span style="background: #7cb5ec;"></span>爱奇艺 </li>-->
+                    </div>
+                    <div class="containertit_fr" id="selectedTime_radical">
+                        <span class="selected">7天</span>
+                        <span>30天</span>
+                        <span>90天</span>
+                        <span>半年</span>
+                        <span>全部</span>
+                        <div class="baseline" id="baseline_radical" >
+                            <button baseVal = 'day' type="button" onclick="baseLineShow(this)">日线</button>
+                            <div class="baseline_dropdown">
+                                <ul baseVal = 'day' onclick="searchClickBaselineRadical(this)">日线</ul>
+                                <ul baseVal = 'week' onclick="searchClickBaselineRadical(this)">周线</ul>
+                                <ul baseVal = 'month' onclick="searchClickBaselineRadical(this)">月线</ul>
+                                <ul baseVal = 'quarter' onclick="searchClickBaselineRadical(this)">季线</ul>
+                                <ul baseVal = 'year' onclick="searchClickBaselineRadical(this)">年线</ul>
+                            </div>
+                        </div>
+                        <div class="customTime" id="customTime_radical" >自定义</div>
+                       <!-- <%&#45;&#45;01 自定义时间 radical&#45;&#45;%>-->
+                        <div id="date_radical" class="data">
+                            <a class="clear">
+                                <span class="startTimeAndEndTime">日期：${startTime}~${endTime}</span><span class="data_angle"></span>
+                            </a>
+                            <div class="pop dataPop">
+                                <div class="info">
+                                    <div class="rq clear">
+                                        <!--<input id="startTime" readonly="readonly" maxlength="10" onkeyup="upDo(this);" class="Wdate" type="text" value=${startTime}  />-->
+                                        <input id="startTime_radical" readonly="readonly" maxlength="10" onkeyup="upDo(this);" class="Wdate" type="text" value="2018-10-01"  />
+                                        &nbsp;至&nbsp;
+                                        <input id="endTime_radical" readonly="readonly" maxlength="10" onkeyup="upDo(this);"  class="Wdate" type="text" value="2018-10-10" />
+                                        <div class="clear">
+                                            <!-- 开始日期控件 -->
+                                            <div id="startDiv_radical" style="border:1px solid white;float:left;"></div>
+                                            <!-- 结束日期控件 -->
+                                            <div id="endDiv_radical" style="border:1px solid white;float: right;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="ok_time"><span id="ok_radical" onclick="startAndEndTimeNSRadical.okTime()">确定</span><span id="cancel_radical">取消</span></div>
+                                <div class="popTL"></div>
+                                <div class="popTR"></div>
+                                <div class="popBL"></div>
+                                <div class="popBR"></div>
+                                <div class="popT"></div>
+                                <div class="popL"></div>
+                                <div class="popB"></div>
+                                <div class="popR"></div>
+                                <div class="angle"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="containercon" id="containerRadical" style="width: 1180px;">
+                    <div class="no_data">
+                        <div><img src="./11/image/none_data.png" /> </div>
+                        <p>在当前搜索条件下无数据</p>
+                        <p>建议您放宽搜索条件进行查询！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
